@@ -113,17 +113,18 @@ export default function HomePage() {
               查看更多 ›
             </button>
           </div>
-          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+          <div className="space-y-3">
             {recommendations.dailyRecipes.slice(0, 5).map(recipe => (
               <div
                 key={recipe.id}
-                className="bg-white rounded-2xl p-5 shadow-sm border border-cream-300/60 min-w-[200px] flex-shrink-0"
+                className="bg-white rounded-2xl p-5 shadow-sm border border-cream-300/60"
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-xl flex-shrink-0">
                     {recipe.category === 'soup' ? '🍲' : recipe.category === 'main' ? '🍽️' : recipe.category === 'breakfast' ? '🥣' : recipe.category === 'snack' ? '🍰' : '🥤'}
                   </span>
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                  <h4 className="font-medium text-sage-800 text-sm flex-1">{recipe.name}</h4>
+                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex-shrink-0 ${
                     recipe.difficulty === 'easy' ? 'bg-sage-100 text-sage-600' :
                     recipe.difficulty === 'medium' ? 'bg-terra-100 text-terra-600' :
                     'bg-cream-300 text-sage-700'
@@ -131,10 +132,9 @@ export default function HomePage() {
                     {recipe.difficulty === 'easy' ? '简单' : recipe.difficulty === 'medium' ? '中等' : '较难'}
                   </span>
                 </div>
-                <h4 className="font-medium text-sage-800 text-sm mb-2">{recipe.name}</h4>
-                <p className="text-xs text-sage-500 mb-3 leading-relaxed">{recipe.benefits.slice(0, 35)}...</p>
+                <p className="text-xs text-sage-500 mb-3 leading-relaxed">{recipe.benefits.slice(0, 50)}{recipe.benefits.length > 50 ? '...' : ''}</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {recipe.keyNutrients.slice(0, 3).map(n => (
+                  {recipe.keyNutrients.slice(0, 4).map(n => (
                     <span key={n} className="text-xs bg-cream-200/70 text-sage-600 px-2 py-1 rounded-lg">{n}</span>
                   ))}
                 </div>
@@ -156,22 +156,24 @@ export default function HomePage() {
               查看更多 ›
             </button>
           </div>
-          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+          <div className="space-y-3">
             {recommendations.dailyExercises.slice(0, 3).map(exercise => (
               <div
                 key={exercise.id}
-                className="bg-white rounded-2xl p-5 shadow-sm border border-cream-300/60 min-w-[220px] flex-shrink-0"
+                className="bg-white rounded-2xl p-5 shadow-sm border border-cream-300/60"
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl">
+                <div className="flex items-center gap-3">
+                  <span className="text-xl flex-shrink-0">
                     {exercise.category === 'yoga' ? '🧘' : exercise.category === 'walking' ? '🚶' : exercise.category === 'pelvic' ? '🦵' : exercise.category === 'breathing' ? '🌬️' : '🤸'}
                   </span>
-                  <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-sage-100 text-sage-600">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-sage-800 text-sm">{exercise.name}</h4>
+                    <p className="text-xs text-sage-500 mt-0.5">{exercise.frequency}</p>
+                  </div>
+                  <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-sage-100 text-sage-600 flex-shrink-0">
                     {exercise.duration}分钟
                   </span>
                 </div>
-                <h4 className="font-medium text-sage-800 text-sm mb-2">{exercise.name}</h4>
-                <p className="text-xs text-sage-500">{exercise.frequency}</p>
               </div>
             ))}
           </div>
