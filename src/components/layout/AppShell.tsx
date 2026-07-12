@@ -8,9 +8,9 @@ interface Props {
 
 export default function AppShell({ children }: Props) {
   return (
-    <div className="flex flex-col h-full bg-primary-50">
+    <div className="flex flex-col h-full bg-cream-200">
       <TopBar />
-      <main className="flex-1 overflow-y-auto overflow-x-hidden pb-2">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden">
         {children}
       </main>
       <BottomNav />

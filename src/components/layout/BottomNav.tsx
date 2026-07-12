@@ -17,7 +17,7 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="sticky bottom-0 z-50 bg-white border-t border-primary-100 shadow-lg safe-area-bottom">
+    <nav className="sticky bottom-0 z-50 bg-cream-100/95 backdrop-blur-sm border-t border-cream-300/40">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
         {tabs.map(tab => {
           const active = isActive(tab.path)
@@ -25,14 +25,14 @@ export default function BottomNav() {
             <button
               key={tab.path}
               onClick={() => navigate(tab.path)}
-              className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors ${
+              className={`flex flex-col items-center justify-center gap-1 w-full h-full transition-colors ${
                 active
-                  ? 'text-primary-500'
-                  : 'text-gray-400 hover:text-primary-300'
+                  ? 'text-sage-600'
+                  : 'text-sage-300 hover:text-sage-400'
               }`}
             >
               <span className="text-xl">{tab.icon}</span>
-              <span className={`text-xs ${active ? 'font-semibold' : ''}`}>
+              <span className={`text-xs tracking-wide ${active ? 'font-medium' : ''}`}>
                 {tab.label}
               </span>
             </button>

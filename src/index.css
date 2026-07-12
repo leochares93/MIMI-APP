@@ -1,30 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #fef1f7;
-  --color-primary-100: #fde6f1;
-  --color-primary-200: #fbcfe4;
-  --color-primary-300: #f9a8d4;
-  --color-primary-400: #f472b6;
-  --color-primary-500: #ec4899;
-  --color-primary-600: #db2777;
-  --color-primary-700: #be185d;
-  --color-primary-800: #9d174d;
-  --color-primary-900: #831843;
+  /* 自然静谧 - 主色调 */
+  --color-sage-50: #f6f8f5;
+  --color-sage-100: #e8efe6;
+  --color-sage-200: #d1e0ce;
+  --color-sage-300: #b0c9aa;
+  --color-sage-400: #8aaa95;
+  --color-sage-500: #6b8e74;
+  --color-sage-600: #55735e;
+  --color-sage-700: #445c4b;
+  --color-sage-800: #3a4c3e;
+  --color-sage-900: #334036;
 
-  --color-warm-50: #fffbeb;
-  --color-warm-100: #fef3c7;
-  --color-warm-200: #fde68a;
-  --color-warm-300: #fcd34d;
-  --color-warm-400: #fbbf24;
-  --color-warm-500: #f59e0b;
+  /* 温暖陶土 - 强调色 */
+  --color-terra-50: #fcf7f4;
+  --color-terra-100: #f8ede6;
+  --color-terra-200: #f0d9cc;
+  --color-terra-300: #e4bea8;
+  --color-terra-400: #c4947c;
+  --color-terra-500: #b0785e;
+  --color-terra-600: #9b6550;
+  --color-terra-700: #815244;
+  --color-terra-800: #6a453b;
+  --color-terra-900: #593c34;
 
-  --color-calm-50: #f0fdfa;
-  --color-calm-100: #ccfbf1;
-  --color-calm-200: #99f6e4;
-  --color-calm-300: #5eead4;
-  --color-calm-400: #2dd4bf;
-  --color-calm-500: #14b8a6;
+  /* 暖奶油 - 背景色 */
+  --color-cream-50: #fefdfb;
+  --color-cream-100: #fcf9f2;
+  --color-cream-200: #faf7f2;
+  --color-cream-300: #f5efe4;
+  --color-cream-400: #ede3d3;
 }
 
 * {
@@ -43,13 +49,14 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fef2f2;
-  color: #374151;
+  background-color: #FAF7F2;
+  color: #3D3D3D;
+  letter-spacing: 0.01em;
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -57,8 +64,8 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #f9a8d4;
-  border-radius: 2px;
+  background: #d1cec8;
+  border-radius: 3px;
 }
 
 .scroll-smooth {
@@ -78,7 +85,7 @@ body {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -87,31 +94,36 @@ body {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.3s ease-out;
+  animation: fadeInUp 0.4s ease-out;
 }
 
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* 表单输入框 */
 .form-input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e0d8;
   font-size: 0.875rem;
-  color: #374151;
-  background-color: #f9fafb;
+  color: #3D3D3D;
+  background-color: #FFFCF7;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
 
 .form-input:focus {
-  border-color: #f472b6;
-  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.1);
+  border-color: #8AAA95;
+  box-shadow: 0 0 0 3px rgba(138, 170, 149, 0.12);
 }
 
-@keyframes bounce {
-  0%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-}
-
-.animate-bounce {
-  animation: bounce 1s infinite;
+.form-input::placeholder {
+  color: #c4bfb5;
 }
