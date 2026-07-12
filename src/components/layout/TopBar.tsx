@@ -7,22 +7,20 @@ export default function TopBar() {
   const weekData = weeks.find(w => w.week === week)
 
   return (
-    <header className="sticky top-0 z-50 bg-cream-200/95 backdrop-blur-sm border-b border-cream-300/60">
-      <div className="flex items-center justify-between px-5 h-14">
+    <header className="sticky top-0 z-50 bg-[#faf7f2]/80 backdrop-blur-xl border-b border-black/5">
+      <div className="flex items-center justify-between px-6 h-14 max-w-2xl mx-auto">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">🤰</span>
+          <span className="text-xl">🤰</span>
           <div>
-            <h1 className="text-base font-medium text-sage-800 leading-tight tracking-wide">孕期助手</h1>
-            <p className="text-xs text-sage-500 leading-tight">
-              第{week}周 · {weekData?.fetalSize || '...'}
-            </p>
+            <p className="text-sm font-semibold text-black/80 tracking-tight">孕期助手</p>
+            <p className="text-xs text-black/40">第{week}周 · {weekData?.fetalSize || '...'}</p>
           </div>
         </div>
-        <div className="text-xs text-sage-500 text-right">
+        <div>
           {profile.name ? (
-            <span>{profile.name}</span>
+            <span className="text-xs text-black/50">{profile.name}</span>
           ) : (
-            <span className="text-sage-400">设置档案 ›</span>
+            <span className="text-xs text-black/30">设置档案 →</span>
           )}
         </div>
       </div>

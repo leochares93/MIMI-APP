@@ -4,256 +4,197 @@ import { calculateBMI, getBMICategory, getRecommendedWeightGain } from '../../ut
 import { calculateDueDate, formatDueDate } from '../../utils/weekCalculator'
 import type { Allergen, HealthCondition, ActivityLevel } from '../../types'
 
-const ALLERGEN_OPTIONS: { value: Allergen; label: string }[] = [
-  { value: 'none', label: '无过敏' },
-  { value: 'milk', label: '牛奶' },
-  { value: 'eggs', label: '鸡蛋' },
-  { value: 'peanuts', label: '花生' },
-  { value: 'tree_nuts', label: '坚果' },
-  { value: 'soy', label: '大豆' },
-  { value: 'wheat', label: '小麦' },
-  { value: 'fish', label: '鱼类' },
-  { value: 'shellfish', label: '虾蟹贝类' },
-  { value: 'sesame', label: '芝麻' },
+const ALLERGENS: { value: Allergen; label: string }[] = [
+  { value: 'none', label: '无' }, { value: 'milk', label: '牛奶' }, { value: 'eggs', label: '鸡蛋' },
+  { value: 'peanuts', label: '花生' }, { value: 'tree_nuts', label: '坚果' }, { value: 'soy', label: '大豆' },
+  { value: 'wheat', label: '小麦' }, { value: 'fish', label: '鱼类' }, { value: 'shellfish', label: '虾蟹贝类' }, { value: 'sesame', label: '芝麻' },
 ]
 
-const HEALTH_CONDITIONS: { value: HealthCondition; label: string }[] = [
-  { value: 'none', label: '无特殊状况' },
-  { value: 'gestational_diabetes', label: '妊娠糖尿病' },
-  { value: 'gestational_hypertension', label: '妊娠高血压' },
-  { value: 'anemia', label: '贫血' },
-  { value: 'thyroid_disorder', label: '甲状腺异常' },
+const CONDITIONS: { value: HealthCondition; label: string }[] = [
+  { value: 'none', label: '无' }, { value: 'gestational_diabetes', label: '妊娠糖尿病' },
+  { value: 'gestational_hypertension', label: '妊娠高血压' }, { value: 'anemia', label: '贫血' }, { value: 'thyroid_disorder', label: '甲状腺异常' },
 ]
 
-const ACTIVITY_LEVELS: { value: ActivityLevel; label: string; desc: string }[] = [
+const LEVELS: { value: ActivityLevel; label: string; desc: string }[] = [
   { value: 'sedentary', label: '久坐少动', desc: '很少运动' },
-  { value: 'moderate', label: '适度运动', desc: '每周运动2-3次' },
-  { value: 'active', label: '经常运动', desc: '每周运动4次以上' },
+  { value: 'moderate', label: '适度运动', desc: '每周 2-3 次' },
+  { value: 'active', label: '经常运动', desc: '每周 4 次以上' },
 ]
 
 export default function ProfilePage() {
   const { profile, updateProfile, updateAllergies, updateHealthConditions, updateActivityLevel, resetProfile } = useProfileStore()
   const [form, setForm] = useState({ ...profile })
-
   const bmi = calculateBMI(profile.prePregnancyWeight, profile.height)
-  const bmiCategory = getBMICategory(bmi)
   const weightGain = getRecommendedWeightGain(bmi, profile.isMultiplePregnancy)
 
   const handleSave = () => {
-    if (form.lastPeriodDate && !form.dueDate) {
-      form.dueDate = calculateDueDate(form.lastPeriodDate)
-    }
+    if (form.lastPeriodDate && !form.dueDate) form.dueDate = calculateDueDate(form.lastPeriodDate)
     updateProfile(form)
-    alert('档案已保存')
+    alert('已保存')
   }
 
-  const handleAllergyToggle = (allergen: Allergen) => {
-    if (allergen === 'none') { updateAllergies(['none']); return }
-    const current = profile.allergies.filter(a => a !== 'none')
-    const newAllergies = current.includes(allergen)
-      ? current.filter(a => a !== allergen)
-      : [...current, allergen]
-    updateAllergies(newAllergies.length === 0 ? ['none'] : newAllergies)
+  const toggleAllergy = (a: Allergen) => {
+    if (a === 'none') return updateAllergies(['none'])
+    const cur = profile.allergies.filter(x => x !== 'none')
+    const next = cur.includes(a) ? cur.filter(x => x !== a) : [...cur, a]
+    updateAllergies(next.length === 0 ? ['none'] : next)
   }
 
-  const handleHealthToggle = (condition: HealthCondition) => {
-    if (condition === 'none') { updateHealthConditions(['none']); return }
-    const current = profile.healthConditions.filter(c => c !== 'none')
-    const newConditions = current.includes(condition)
-      ? current.filter(c => c !== condition)
-      : [...current, condition]
-    updateHealthConditions(newConditions.length === 0 ? ['none'] : newConditions)
+  const toggleCondition = (c: HealthCondition) => {
+    if (c === 'none') return updateHealthConditions(['none'])
+    const cur = profile.healthConditions.filter(x => x !== 'none')
+    const next = cur.includes(c) ? cur.filter(x => x !== c) : [...cur, c]
+    updateHealthConditions(next.length === 0 ? ['none'] : next)
   }
 
   return (
-    <div className="p-5 pb-24 space-y-6">
-      {/* 健康概览 */}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-cream-300/60">
-        <h2 className="text-base font-medium text-sage-800 tracking-wide mb-5">健康概览</h2>
-        <div className="grid grid-cols-3 gap-6 text-center">
+    <div className="pb-24">
+      {/* ── 健康概览 ── */}
+      <section className="px-6 pt-10 pb-8">
+        <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-8">健康概览</p>
+        <div className="grid grid-cols-3 gap-8">
           <div>
-            <p className="text-3xl font-light text-sage-800">{bmi}</p>
-            <p className="text-xs text-sage-400 mt-1 tracking-wide">孕前 BMI</p>
-            <p className="text-xs text-sage-500 mt-1">{bmiCategory}</p>
+            <p className="text-4xl font-light tracking-tight text-black/80">{bmi}</p>
+            <p className="text-xs text-black/30 mt-2 tracking-wide">孕前 BMI</p>
+            <p className="text-xs text-black/40 mt-1">{getBMICategory(bmi)}</p>
           </div>
           <div>
-            <p className="text-3xl font-light text-sage-800">{profile.currentWeek}</p>
-            <p className="text-xs text-sage-400 mt-1 tracking-wide">当前孕周</p>
+            <p className="text-4xl font-light tracking-tight text-black/80">{profile.currentWeek}</p>
+            <p className="text-xs text-black/30 mt-2 tracking-wide">孕周</p>
           </div>
           <div>
-            <p className="text-3xl font-light text-sage-800">{weightGain.total}</p>
-            <p className="text-xs text-sage-400 mt-1 tracking-wide">建议增重</p>
+            <p className="text-4xl font-light tracking-tight text-black/80">{weightGain.total}</p>
+            <p className="text-xs text-black/30 mt-2 tracking-wide">建议增重</p>
           </div>
         </div>
         {profile.dueDate && (
-          <div className="mt-5 pt-5 border-t border-cream-200/60 text-center">
-            <p className="text-sm text-sage-500">
-              预产期 <span className="font-medium text-sage-700">{formatDueDate(profile.dueDate)}</span>
-            </p>
-          </div>
+          <p className="text-sm text-black/40 mt-6 pt-6 border-t border-black/5">预产期 {formatDueDate(profile.dueDate)}</p>
         )}
-      </div>
+      </section>
 
-      {/* 基本信息 */}
+      <div className="h-px bg-black/5 mx-6" />
+
+      {/* ── 基本信息 ── */}
       <Section title="基本信息">
-        <FormField label="姓名">
-          <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="请输入姓名" className="form-input" />
-        </FormField>
-        <FormField label="年龄">
-          <input type="number" value={form.age} onChange={e => setForm({ ...form, age: parseInt(e.target.value) || 0 })} min={18} max={55} className="form-input" />
-        </FormField>
+        <Field label="姓名"><input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="form-input" placeholder="你的名字" /></Field>
+        <Field label="年龄"><input type="number" value={form.age} onChange={e => setForm({ ...form, age: +e.target.value || 0 })} min={18} max={55} className="form-input" /></Field>
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="身高 (cm)">
-            <input type="number" value={form.height} onChange={e => setForm({ ...form, height: parseFloat(e.target.value) || 0 })} min={140} max={200} step={0.1} className="form-input" />
-          </FormField>
-          <FormField label="孕前体重 (kg)">
-            <input type="number" value={form.prePregnancyWeight} onChange={e => setForm({ ...form, prePregnancyWeight: parseFloat(e.target.value) || 0 })} min={35} max={150} step={0.1} className="form-input" />
-          </FormField>
+          <Field label="身高 (cm)"><input type="number" value={form.height} onChange={e => setForm({ ...form, height: +e.target.value || 0 })} min={140} max={200} step={0.1} className="form-input" /></Field>
+          <Field label="孕前体重 (kg)"><input type="number" value={form.prePregnancyWeight} onChange={e => setForm({ ...form, prePregnancyWeight: +e.target.value || 0 })} min={35} max={150} step={0.1} className="form-input" /></Field>
         </div>
-        <FormField label="当前体重 (kg)">
-          <input type="number" value={form.currentWeight} onChange={e => setForm({ ...form, currentWeight: parseFloat(e.target.value) || 0 })} min={35} max={150} step={0.1} className="form-input" />
-        </FormField>
+        <Field label="当前体重 (kg)"><input type="number" value={form.currentWeight} onChange={e => setForm({ ...form, currentWeight: +e.target.value || 0 })} min={35} max={150} step={0.1} className="form-input" /></Field>
       </Section>
 
-      {/* 孕期信息 */}
+      <div className="h-px bg-black/5 mx-6" />
+
+      {/* ── 孕期信息 ── */}
       <Section title="孕期信息">
-        <FormField label="末次月经日期">
-          <input
-            type="date"
-            value={form.lastPeriodDate}
-            onChange={e => {
-              const lmp = e.target.value
-              const due = calculateDueDate(lmp)
-              setForm({ ...form, lastPeriodDate: lmp, dueDate: due })
-            }}
-            className="form-input"
-          />
-        </FormField>
-        <FormField label="当前孕周">
-          <div className="space-y-2">
-            <input
-              type="range"
-              value={form.currentWeek}
-              onChange={e => setForm({ ...form, currentWeek: parseInt(e.target.value) })}
-              min={1} max={40}
-              className="w-full accent-sage-500 h-1.5"
-            />
-            <div className="flex justify-between text-xs text-sage-400">
-              <span>1周</span>
-              <span className="text-sage-700 font-medium text-base">{form.currentWeek}周</span>
-              <span>40周</span>
-            </div>
-          </div>
-        </FormField>
-        <div className="flex items-center gap-3 mt-4">
-          <input type="checkbox" checked={form.isMultiplePregnancy} onChange={e => setForm({ ...form, isMultiplePregnancy: e.target.checked })} id="multiple" className="w-4 h-4 accent-sage-500 rounded" />
-          <label htmlFor="multiple" className="text-sm text-sage-700">多胎妊娠（双胞胎等）</label>
-        </div>
+        <Field label="末次月经">
+          <input type="date" value={form.lastPeriodDate} onChange={e => { const lmp = e.target.value; setForm({ ...form, lastPeriodDate: lmp, dueDate: calculateDueDate(lmp) }) }} className="form-input" />
+        </Field>
+        <Field label={`当前孕周 · ${form.currentWeek} 周`}>
+          <input type="range" value={form.currentWeek} onChange={e => setForm({ ...form, currentWeek: +e.target.value })} min={1} max={40} className="w-full accent-black/60 h-1" />
+          <div className="flex justify-between text-[11px] text-black/25 mt-2"><span>1</span><span>20</span><span>40</span></div>
+        </Field>
+        <label className="flex items-center gap-3 mt-4 text-sm text-black/55">
+          <input type="checkbox" checked={form.isMultiplePregnancy} onChange={e => setForm({ ...form, isMultiplePregnancy: e.target.checked })} className="w-4 h-4 accent-black/60 rounded" />
+          多胎妊娠（双胞胎等）
+        </label>
       </Section>
 
-      {/* 过敏源 */}
+      <div className="h-px bg-black/5 mx-6" />
+
+      {/* ── 过敏源 ── */}
       <Section title="过敏源">
-        <div className="flex flex-wrap gap-2">
-          {ALLERGEN_OPTIONS.map(a => (
-            <button
-              key={a.value}
-              onClick={() => handleAllergyToggle(a.value)}
-              className={`px-3.5 py-2 rounded-xl text-xs transition-all duration-200 ${
-                profile.allergies.includes(a.value)
-                  ? 'bg-red-50 text-red-600 border border-red-200 font-medium'
-                  : 'bg-cream-200/50 text-sage-500 border border-cream-300/40 hover:border-sage-200'
-              }`}
-            >
-              {a.label}
-            </button>
-          ))}
-        </div>
+        <Chips options={ALLERGENS} selected={profile.allergies} onToggle={toggleAllergy} />
       </Section>
 
-      {/* 健康状况 */}
+      <div className="h-px bg-black/5 mx-6" />
+
+      {/* ── 健康状况 ── */}
       <Section title="健康状况">
-        <div className="flex flex-wrap gap-2">
-          {HEALTH_CONDITIONS.map(c => (
-            <button
-              key={c.value}
-              onClick={() => handleHealthToggle(c.value)}
-              className={`px-3.5 py-2 rounded-xl text-xs transition-all duration-200 ${
-                profile.healthConditions.includes(c.value)
-                  ? 'bg-terra-50 text-terra-700 border border-terra-200 font-medium'
-                  : 'bg-cream-200/50 text-sage-500 border border-cream-300/40 hover:border-sage-200'
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
-        </div>
+        <Chips options={CONDITIONS} selected={profile.healthConditions} onToggle={toggleCondition} />
       </Section>
 
-      {/* 活动水平 */}
+      <div className="h-px bg-black/5 mx-6" />
+
+      {/* ── 活动水平 ── */}
       <Section title="孕前活动水平">
-        <div className="space-y-2.5">
-          {ACTIVITY_LEVELS.map(l => (
+        <div className="space-y-2">
+          {LEVELS.map(l => (
             <button
               key={l.value}
               onClick={() => updateActivityLevel(l.value)}
-              className={`w-full text-left px-4 py-3.5 rounded-xl text-sm transition-all duration-200 ${
-                profile.activityLevel === l.value
-                  ? 'bg-sage-50 border-2 border-sage-400 text-sage-700 font-medium'
-                  : 'bg-cream-200/50 border-2 border-transparent text-sage-500 hover:bg-cream-200'
+              className={`w-full text-left px-4 py-3.5 rounded-xl text-sm transition-colors ${
+                profile.activityLevel === l.value ? 'bg-black/[0.04] text-black/70 font-medium' : 'text-black/40 hover:bg-black/[0.02]'
               }`}
             >
-              <span className="font-medium">{l.label}</span>
-              <span className="text-sage-400 ml-2">{l.desc}</span>
+              {l.label} <span className="text-black/25 ml-2">{l.desc}</span>
             </button>
           ))}
         </div>
       </Section>
 
-      {/* 饮食偏好 */}
+      <div className="h-px bg-black/5 mx-6" />
+
+      {/* ── 饮食偏好 ── */}
       <Section title="饮食偏好">
-        <div className="flex items-center gap-3">
-          <input type="checkbox" checked={form.isVegetarian} onChange={e => setForm({ ...form, isVegetarian: e.target.checked })} id="vegetarian" className="w-4 h-4 accent-sage-500 rounded" />
-          <label htmlFor="vegetarian" className="text-sm text-sage-700">素食者</label>
-        </div>
+        <label className="flex items-center gap-3 text-sm text-black/55">
+          <input type="checkbox" checked={form.isVegetarian} onChange={e => setForm({ ...form, isVegetarian: e.target.checked })} className="w-4 h-4 accent-black/60 rounded" />
+          素食者
+        </label>
       </Section>
 
-      {/* 操作按钮 */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleSave}
-          className="flex-1 py-3.5 bg-sage-500 text-white rounded-2xl font-medium text-sm hover:bg-sage-600 transition-colors shadow-sm tracking-wide"
-        >
-          保存档案
-        </button>
-        <button
-          onClick={() => { if (confirm('确定要重置所有信息吗？')) { resetProfile(); setForm({ ...profile }) } }}
-          className="px-5 py-3.5 bg-cream-200/50 text-sage-500 rounded-2xl hover:bg-cream-200 transition-colors text-sm"
-        >
-          重置
-        </button>
+      {/* ── 操作 ── */}
+      <div className="px-6 py-8 flex gap-3">
+        <button onClick={handleSave} className="flex-1 py-3.5 bg-black/80 text-white rounded-2xl font-medium text-sm hover:bg-black transition-colors">保存档案</button>
+        <button onClick={() => { if (confirm('重置所有信息？')) { resetProfile(); setForm({ ...profile }) } }} className="px-5 py-3.5 bg-black/[0.03] text-black/40 rounded-2xl text-sm hover:bg-black/[0.06] transition-colors">重置</button>
       </div>
 
-      <p className="text-xs text-sage-400 text-center pb-4 leading-relaxed">
-        本应用仅供知识参考，不能替代医生诊断<br />如有任何健康问题，请及时就医
+      <p className="px-6 pb-8 text-xs text-black/25 text-center leading-relaxed">
+        本应用仅供知识参考，不能替代医生诊断
       </p>
     </div>
   )
 }
 
+/* ── 子组件 ── */
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-cream-300/60">
-      <h3 className="text-sm font-medium text-sage-800 mb-5 tracking-wide">{title}</h3>
+    <section className="px-6 py-8">
+      <h2 className="text-sm font-semibold text-black/65 tracking-wide mb-6">{title}</h2>
+      {children}
+    </section>
+  )
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-5">
+      <label className="block text-[11px] tracking-[0.1em] uppercase text-black/30 mb-2">{label}</label>
       {children}
     </div>
   )
 }
 
-function FormField({ label, children }: { label: string; children: React.ReactNode }) {
+function Chips({ options, selected, onToggle }: { options: { value: string; label: string }[]; selected: string[]; onToggle: (v: any) => void }) {
   return (
-    <div className="mb-4">
-      <label className="block text-xs text-sage-400 mb-2 tracking-wide">{label}</label>
-      {children}
+    <div className="flex flex-wrap gap-2">
+      {options.map(o => {
+        const isSel = selected.includes(o.value)
+        return (
+          <button
+            key={o.value}
+            onClick={() => onToggle(o.value)}
+            className={`text-xs px-3.5 py-2 rounded-xl transition-colors ${
+              isSel ? 'bg-black/[0.06] text-black/65 font-medium' : 'bg-black/[0.02] text-black/35 hover:bg-black/[0.04]'
+            }`}
+          >
+            {o.label}
+          </button>
+        )
+      })}
     </div>
   )
 }
