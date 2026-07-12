@@ -9,18 +9,18 @@ export default function TopBar() {
   const weekData = weeks.find(w => w.week === week)
 
   return (
-    <header className="sticky top-0 z-50 bg-cream-200/90 backdrop-blur-xl border-b border-sage-200/30">
-      <div className="flex items-center justify-between px-5 h-14">
+    <header className="sticky top-0 z-50 bg-[#FEF9F3]/80 backdrop-blur-xl border-b border-warm-200/60">
+      <div className="flex items-center justify-between px-6 h-14">
         <div className="flex items-center gap-3">
           <span className="text-2xl">🤰</span>
           <div>
-            <p className="text-sm font-semibold text-sage-800 tracking-tight">孕期助手</p>
-            <p className="text-xs text-sage-500">第{week}周 · {weekData?.fetalSize || '...'}</p>
+            <p className="text-sm font-semibold text-warm-900/80">孕期助手</p>
+            <p className="text-xs text-warm-900/40">第{week}周 · {weekData?.fetalSize || '...'}</p>
           </div>
         </div>
         <button
           onClick={() => navigate('/profile')}
-          className="text-xs text-sage-500 hover:text-sage-700 transition-colors px-3 py-1.5 rounded-full hover:bg-sage-100/50"
+          className="text-xs text-peach-500 hover:text-peach-600 font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-peach-50"
         >
           {profile.name ? profile.name : '设置档案 →'}
         </button>

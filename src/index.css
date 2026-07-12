@@ -1,108 +1,72 @@
 @import "tailwindcss";
 
 @theme {
+  --color-peach-50: #fef8f4;
+  --color-peach-100: #fef0e8;
+  --color-peach-200: #fde1d3;
+  --color-peach-300: #fbc8ad;
+  --color-peach-400: #f8a784;
+  --color-peach-500: #f4855e;
+  --color-peach-600: #e06540;
+
+  --color-blush-50: #fef7f9;
+  --color-blush-100: #fdeaf0;
+  --color-blush-200: #fbd4e2;
+  --color-blush-300: #f7aec8;
+  --color-blush-400: #f07ca2;
+  --color-blush-500: #e8507e;
+
   --color-sage-50: #f6f8f5;
   --color-sage-100: #e8efe6;
-  --color-sage-200: #d1e0ce;
-  --color-sage-300: #b0c9aa;
-  --color-sage-400: #8aaa95;
-  --color-sage-500: #6b8e74;
-  --color-sage-600: #55735e;
-  --color-sage-700: #445c4b;
-  --color-sage-800: #3a4c3e;
-  --color-sage-900: #334036;
+  --color-sage-200: #c5d8c2;
+  --color-sage-300: #9dba96;
+  --color-sage-400: #7a9e71;
+  --color-sage-500: #5d8254;
+  --color-sage-600: #4a6943;
 
-  --color-terra-50: #fcf7f4;
-  --color-terra-100: #f8ede6;
-  --color-terra-200: #f0d9cc;
-  --color-terra-300: #e4bea8;
-  --color-terra-400: #c4947c;
-  --color-terra-500: #b0785e;
-  --color-terra-600: #9b6550;
-
-  --color-cream-50: #fefdfb;
-  --color-cream-100: #fcf9f5;
-  --color-cream-200: #faf7f2;
-  --color-cream-300: #f5efe4;
+  --color-warm-50: #fefdfb;
+  --color-warm-100: #fdf9f3;
+  --color-warm-200: #faf3e7;
+  --color-warm-300: #f5e8d3;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
+html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: #FAF7F2;
-  color: #1a1a1a;
-  line-height: 1.6;
+  background: #FEF9F3;
+  color: #2d2420;
 }
 
-/* Apple-style minimal scrollbar */
-::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1);
-  border-radius: 3px;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Subtle animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
+.animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 
-@keyframes breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-}
-.animate-breathe {
-  animation: breathe 4s ease-in-out infinite;
-}
-
-/* Form input - Stripe style */
 .form-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  border: 1.5px solid #e5e0d8;
+  border-radius: 0.75rem;
+  border: 1.5px solid #f0e5d8;
   font-size: 0.9375rem;
-  color: #1a1a1a;
-  background: #fff;
+  color: #2d2420;
+  background: #fffefb;
   transition: border-color 0.15s, box-shadow 0.15s;
   outline: none;
 }
 .form-input:focus {
-  border-color: #8aaa95;
-  box-shadow: 0 0 0 1px #8aaa95;
+  border-color: #f8a784;
+  box-shadow: 0 0 0 3px rgba(248,167,132,0.12);
 }
-.form-input::placeholder {
-  color: #b0ada5;
-}
+.form-input::placeholder { color: #c4b8ab; }
