@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const handleSave = () => {
     if (form.lastPeriodDate && !form.dueDate) form.dueDate = calculateDueDate(form.lastPeriodDate)
     updateProfile(form)
-    alert('已保存')
+    alert('档案已保存')
   }
 
   const toggleAllergy = (a: Allergen) => {
@@ -49,130 +49,122 @@ export default function ProfilePage() {
 
   return (
     <div className="pb-24">
-      {/* ── 健康概览 ── */}
-      <section className="px-6 pt-10 pb-8">
-        <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-8">健康概览</p>
-        <div className="grid grid-cols-3 gap-8">
+      {/* ════ 健康概览 ════ */}
+      <div className="mx-4 mt-4 bg-gradient-to-br from-sage-400 to-sage-500 rounded-[2rem] p-8 text-white shadow-lg shadow-sage-400/20">
+        <p className="text-white/60 text-xs tracking-[0.15em] uppercase mb-6">健康概览</p>
+        <div className="grid grid-cols-3 gap-6">
           <div>
-            <p className="text-4xl font-light tracking-tight text-black/80">{bmi}</p>
-            <p className="text-xs text-black/30 mt-2 tracking-wide">孕前 BMI</p>
-            <p className="text-xs text-black/40 mt-1">{getBMICategory(bmi)}</p>
+            <p className="text-3xl font-bold">{bmi}</p>
+            <p className="text-xs text-white/50 mt-1.5 tracking-wide">孕前 BMI</p>
+            <p className="text-xs text-white/40 mt-0.5">{getBMICategory(bmi)}</p>
           </div>
           <div>
-            <p className="text-4xl font-light tracking-tight text-black/80">{profile.currentWeek}</p>
-            <p className="text-xs text-black/30 mt-2 tracking-wide">孕周</p>
+            <p className="text-3xl font-bold">{profile.currentWeek}</p>
+            <p className="text-xs text-white/50 mt-1.5 tracking-wide">当前孕周</p>
           </div>
           <div>
-            <p className="text-4xl font-light tracking-tight text-black/80">{weightGain.total}</p>
-            <p className="text-xs text-black/30 mt-2 tracking-wide">建议增重</p>
+            <p className="text-3xl font-bold">{weightGain.total}</p>
+            <p className="text-xs text-white/50 mt-1.5 tracking-wide">建议增重</p>
           </div>
         </div>
         {profile.dueDate && (
-          <p className="text-sm text-black/40 mt-6 pt-6 border-t border-black/5">预产期 {formatDueDate(profile.dueDate)}</p>
+          <p className="text-sm text-white/50 mt-5 pt-5 border-t border-white/15">
+            预产期 {formatDueDate(profile.dueDate)}
+          </p>
         )}
-      </section>
+      </div>
 
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 基本信息 ── */}
+      {/* ════ 基本信息 ════ */}
       <Section title="基本信息">
         <Field label="姓名"><input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="form-input" placeholder="你的名字" /></Field>
         <Field label="年龄"><input type="number" value={form.age} onChange={e => setForm({ ...form, age: +e.target.value || 0 })} min={18} max={55} className="form-input" /></Field>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <Field label="身高 (cm)"><input type="number" value={form.height} onChange={e => setForm({ ...form, height: +e.target.value || 0 })} min={140} max={200} step={0.1} className="form-input" /></Field>
           <Field label="孕前体重 (kg)"><input type="number" value={form.prePregnancyWeight} onChange={e => setForm({ ...form, prePregnancyWeight: +e.target.value || 0 })} min={35} max={150} step={0.1} className="form-input" /></Field>
         </div>
         <Field label="当前体重 (kg)"><input type="number" value={form.currentWeight} onChange={e => setForm({ ...form, currentWeight: +e.target.value || 0 })} min={35} max={150} step={0.1} className="form-input" /></Field>
       </Section>
 
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 孕期信息 ── */}
+      {/* ════ 孕期信息 ════ */}
       <Section title="孕期信息">
         <Field label="末次月经">
           <input type="date" value={form.lastPeriodDate} onChange={e => { const lmp = e.target.value; setForm({ ...form, lastPeriodDate: lmp, dueDate: calculateDueDate(lmp) }) }} className="form-input" />
         </Field>
         <Field label={`当前孕周 · ${form.currentWeek} 周`}>
-          <input type="range" value={form.currentWeek} onChange={e => setForm({ ...form, currentWeek: +e.target.value })} min={1} max={40} className="w-full accent-black/60 h-1" />
-          <div className="flex justify-between text-[11px] text-black/25 mt-2"><span>1</span><span>20</span><span>40</span></div>
+          <input type="range" value={form.currentWeek} onChange={e => setForm({ ...form, currentWeek: +e.target.value })} min={1} max={40} className="w-full accent-sage-500 h-1.5" />
+          <div className="flex justify-between text-[11px] text-sage-300 mt-2"><span>1周</span><span>20周</span><span>40周</span></div>
         </Field>
-        <label className="flex items-center gap-3 mt-4 text-sm text-black/55">
-          <input type="checkbox" checked={form.isMultiplePregnancy} onChange={e => setForm({ ...form, isMultiplePregnancy: e.target.checked })} className="w-4 h-4 accent-black/60 rounded" />
+        <label className="flex items-center gap-3 mt-4 text-sm text-sage-600">
+          <input type="checkbox" checked={form.isMultiplePregnancy} onChange={e => setForm({ ...form, isMultiplePregnancy: e.target.checked })} className="w-4 h-4 accent-sage-500 rounded" />
           多胎妊娠（双胞胎等）
         </label>
       </Section>
 
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 过敏源 ── */}
+      {/* ════ 过敏源 ════ */}
       <Section title="过敏源">
         <Chips options={ALLERGENS} selected={profile.allergies} onToggle={toggleAllergy} />
       </Section>
 
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 健康状况 ── */}
+      {/* ════ 健康状况 ════ */}
       <Section title="健康状况">
         <Chips options={CONDITIONS} selected={profile.healthConditions} onToggle={toggleCondition} />
       </Section>
 
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 活动水平 ── */}
+      {/* ════ 活动水平 ════ */}
       <Section title="孕前活动水平">
         <div className="space-y-2">
           {LEVELS.map(l => (
             <button
               key={l.value}
               onClick={() => updateActivityLevel(l.value)}
-              className={`w-full text-left px-4 py-3.5 rounded-xl text-sm transition-colors ${
-                profile.activityLevel === l.value ? 'bg-black/[0.04] text-black/70 font-medium' : 'text-black/40 hover:bg-black/[0.02]'
+              className={`w-full text-left px-4 py-3 rounded-xl text-sm transition-colors ${
+                profile.activityLevel === l.value ? 'bg-sage-100 text-sage-700 font-semibold' : 'bg-cream-100/50 text-sage-500 hover:bg-sage-50'
               }`}
             >
-              {l.label} <span className="text-black/25 ml-2">{l.desc}</span>
+              {l.label} <span className="text-sage-400 font-normal ml-2">{l.desc}</span>
             </button>
           ))}
         </div>
       </Section>
 
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 饮食偏好 ── */}
+      {/* ════ 饮食偏好 ════ */}
       <Section title="饮食偏好">
-        <label className="flex items-center gap-3 text-sm text-black/55">
-          <input type="checkbox" checked={form.isVegetarian} onChange={e => setForm({ ...form, isVegetarian: e.target.checked })} className="w-4 h-4 accent-black/60 rounded" />
+        <label className="flex items-center gap-3 text-sm text-sage-600">
+          <input type="checkbox" checked={form.isVegetarian} onChange={e => setForm({ ...form, isVegetarian: e.target.checked })} className="w-4 h-4 accent-sage-500 rounded" />
           素食者
         </label>
       </Section>
 
-      {/* ── 操作 ── */}
-      <div className="px-6 py-8 flex gap-3">
-        <button onClick={handleSave} className="flex-1 py-3.5 bg-black/80 text-white rounded-2xl font-medium text-sm hover:bg-black transition-colors">保存档案</button>
-        <button onClick={() => { if (confirm('重置所有信息？')) { resetProfile(); setForm({ ...profile }) } }} className="px-5 py-3.5 bg-black/[0.03] text-black/40 rounded-2xl text-sm hover:bg-black/[0.06] transition-colors">重置</button>
+      {/* ════ 操作 ════ */}
+      <div className="mx-4 mt-6 flex gap-3">
+        <button onClick={handleSave} className="flex-1 py-3.5 bg-sage-500 text-white rounded-2xl font-semibold text-sm hover:bg-sage-600 transition-colors shadow-md">
+          保存档案
+        </button>
+        <button onClick={() => { if (confirm('重置所有信息？')) { resetProfile(); setForm({ ...profile }) } }} className="px-5 py-3.5 bg-gray-100 text-gray-500 rounded-2xl text-sm hover:bg-gray-200 transition-colors">
+          重置
+        </button>
       </div>
 
-      <p className="px-6 pb-8 text-xs text-black/25 text-center leading-relaxed">
+      <p className="mx-4 mt-6 pb-4 text-xs text-sage-400 text-center leading-relaxed">
         本应用仅供知识参考，不能替代医生诊断
       </p>
     </div>
   )
 }
 
-/* ── 子组件 ── */
-
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="px-6 py-8">
-      <h2 className="text-sm font-semibold text-black/65 tracking-wide mb-6">{title}</h2>
+    <div className="mx-4 mt-4 bg-white rounded-[1.5rem] p-6 shadow-sm border border-sage-100/60">
+      <h2 className="text-sm font-bold text-sage-800 mb-5">{title}</h2>
       {children}
-    </section>
+    </div>
   )
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="mb-5">
-      <label className="block text-[11px] tracking-[0.1em] uppercase text-black/30 mb-2">{label}</label>
+    <div className="mb-4">
+      <label className="block text-xs text-sage-400 mb-2 tracking-wide font-medium">{label}</label>
       {children}
     </div>
   )
@@ -187,8 +179,8 @@ function Chips({ options, selected, onToggle }: { options: { value: string; labe
           <button
             key={o.value}
             onClick={() => onToggle(o.value)}
-            className={`text-xs px-3.5 py-2 rounded-xl transition-colors ${
-              isSel ? 'bg-black/[0.06] text-black/65 font-medium' : 'bg-black/[0.02] text-black/35 hover:bg-black/[0.04]'
+            className={`text-xs px-3.5 py-2 rounded-xl font-medium transition-all ${
+              isSel ? 'bg-sage-100 text-sage-700 border border-sage-300' : 'bg-cream-100/50 text-sage-500 border border-sage-100 hover:border-sage-200'
             }`}
           >
             {o.label}

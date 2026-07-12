@@ -17,173 +17,156 @@ export default function HomePage() {
 
   return (
     <div className="pb-24">
-      {/* ── Hero: 孕周进度 ── */}
-      <section className="px-6 pt-10 pb-12">
-        <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-4">当前孕周</p>
-        <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-7xl font-light tracking-[-0.03em] text-black/85">{profile.currentWeek}</span>
-          <span className="text-2xl font-light text-black/30">/ 40 周</span>
+      {/* ════ Hero 渐变大卡片 ════ */}
+      <div className="mx-4 mt-4 bg-gradient-to-br from-sage-400 via-sage-500 to-sage-600 rounded-[2rem] p-8 text-white shadow-lg shadow-sage-400/20">
+        <p className="text-white/60 text-xs tracking-[0.2em] uppercase mb-6">当前孕周</p>
+        <div className="flex items-baseline gap-2 mb-1">
+          <span className="text-7xl font-light tracking-[-0.03em]">{profile.currentWeek}</span>
+          <span className="text-2xl font-light text-white/40">/ 40</span>
         </div>
-        <p className="text-sm text-black/40 mb-8">
-          {profile.dueDate ? `预产期 ${profile.dueDate} · 约 ${remainingDays} 天` : '设置预产期以查看倒计时'}
+        <p className="text-white/60 text-sm mb-8">
+          {profile.dueDate ? `预产期 ${profile.dueDate} · 约 ${remainingDays} 天` : '设置末次月经以计算预产期'}
         </p>
 
         {/* 进度条 */}
-        <div className="h-[2px] bg-black/8 rounded-full overflow-hidden mb-3">
+        <div className="bg-white/15 rounded-full h-2 overflow-hidden mb-3">
           <div
-            className="h-full bg-black/40 rounded-full transition-all duration-1000 ease-out"
+            className="bg-white/80 h-full rounded-full transition-all duration-1000 ease-out"
             style={{ width: `${progressPct}%` }}
           />
         </div>
-        <p className="text-xs text-black/25">{progressPct}% 完成</p>
-      </section>
+        <p className="text-white/50 text-xs">{progressPct}% · 距预产期约 {remainingDays} 天</p>
+      </div>
 
-      {/* ── 分隔 ── */}
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 宝宝状态 ── */}
+      {/* ════ 宝宝发育 ════ */}
       {weekData && (
-        <section
-          className="px-6 py-10 cursor-pointer hover:bg-black/[0.02] transition-colors"
+        <div
           onClick={() => navigate(`/knowledge/week/${profile.currentWeek}`)}
+          className="mx-4 mt-4 bg-white rounded-[1.5rem] p-5 shadow-sm border border-sage-100/60 cursor-pointer hover:shadow-md transition-shadow"
         >
-          <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-6">宝宝发育</p>
-          <div className="flex items-start gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-black/[0.03] flex items-center justify-center text-3xl flex-shrink-0">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-terra-100 to-terra-200 flex items-center justify-center text-2xl flex-shrink-0">
               👶
             </div>
-            <div>
-              <h2 className="text-xl font-medium text-black/80 mb-1.5 tracking-tight">{weekData.title}</h2>
-              <p className="text-sm text-black/40 leading-relaxed mb-1">约 {weekData.fetalSize} · 身长 {weekData.fetalLength}</p>
-              <p className="text-sm text-black/40 leading-relaxed">{weekData.dailyTip}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-sage-400 tracking-wide uppercase mb-1">宝宝本周发育</p>
+              <h3 className="font-semibold text-sage-800">{weekData.title}</h3>
+              <p className="text-sm text-sage-500 mt-0.5 truncate">约 {weekData.fetalSize} · 身长 {weekData.fetalLength}</p>
             </div>
+            <span className="text-sage-300 text-lg">›</span>
           </div>
-        </section>
+          {weekData.dailyTip && (
+            <div className="mt-4 bg-cream-100 rounded-xl px-4 py-3">
+              <p className="text-sm text-sage-700 leading-relaxed">{weekData.dailyTip}</p>
+            </div>
+          )}
+        </div>
       )}
 
-      <div className="h-px bg-black/5 mx-6" />
+      {/* ════ 三指标卡片 ════ */}
+      <div className="grid grid-cols-3 gap-3 mx-4 mt-4">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-sage-100/60 text-center">
+          <p className="text-2xl font-semibold text-sage-700">{bmi}</p>
+          <p className="text-[11px] text-sage-400 mt-1 tracking-wide">孕前 BMI</p>
+          <p className="text-[11px] text-sage-500 mt-0.5">{bmiCategory}</p>
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-sage-100/60 text-center">
+          <p className="text-2xl font-semibold text-sage-700">{profile.currentWeight}</p>
+          <p className="text-[11px] text-sage-400 mt-1 tracking-wide">当前体重</p>
+          <p className="text-[11px] text-sage-300 mt-0.5">kg</p>
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-sage-100/60 text-center">
+          <p className="text-2xl font-semibold text-terra-600">{remainingDays}</p>
+          <p className="text-[11px] text-sage-400 mt-1 tracking-wide">距预产期</p>
+          <p className="text-[11px] text-sage-300 mt-0.5">天</p>
+        </div>
+      </div>
 
-      {/* ── BMI 三指标 ── */}
-      <section className="px-6 py-10">
-        <div className="grid grid-cols-3 gap-8">
-          <div>
-            <p className="text-xs text-black/30 mb-2 tracking-wide">孕前 BMI</p>
-            <p className="text-3xl font-light text-black/70 tracking-tight">{bmi}</p>
-            <p className="text-xs text-black/30 mt-1">{bmiCategory}</p>
+      {/* ════ 推荐食谱 ════ */}
+      {recommendations.dailyRecipes.length > 0 && (
+        <div className="mx-4 mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-base font-semibold text-sage-800">今日推荐食谱</h3>
+              <p className="text-xs text-sage-400 mt-0.5">基于你的孕期精选</p>
+            </div>
+            <button onClick={() => navigate('/knowledge')} className="text-sm text-sage-500 hover:text-sage-700 font-medium transition-colors">
+              全部 ›
+            </button>
           </div>
-          <div>
-            <p className="text-xs text-black/30 mb-2 tracking-wide">当前体重</p>
-            <p className="text-3xl font-light text-black/70 tracking-tight">{profile.currentWeight}<span className="text-base text-black/30 ml-0.5">kg</span></p>
-          </div>
-          <div>
-            <p className="text-xs text-black/30 mb-2 tracking-wide">距预产期</p>
-            <p className="text-3xl font-light text-black/70 tracking-tight">{remainingDays}<span className="text-base text-black/30 ml-0.5">天</span></p>
+          <div className="space-y-3">
+            {recommendations.dailyRecipes.slice(0, 5).map((recipe) => (
+              <div key={recipe.id} className="bg-white rounded-2xl p-4 shadow-sm border border-sage-100/60 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl flex-shrink-0">
+                    {recipe.category === 'soup' ? '🍲' : recipe.category === 'main' ? '🍽️' : recipe.category === 'breakfast' ? '🥣' : recipe.category === 'snack' ? '🍰' : '🥤'}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h4 className="font-semibold text-sage-800 text-sm">{recipe.name}</h4>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${
+                        recipe.difficulty === 'easy' ? 'bg-sage-100 text-sage-600' : 'bg-terra-100 text-terra-600'
+                      }`}>
+                        {recipe.difficulty === 'easy' ? '简单' : '中等'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-sage-500 leading-relaxed line-clamp-2">{recipe.benefits}</p>
+                  </div>
+                </div>
+                <div className="flex gap-1.5 mt-3 ml-11">
+                  {recipe.keyNutrients.slice(0, 4).map(n => (
+                    <span key={n} className="text-[10px] bg-cream-100 text-sage-600 px-2 py-1 rounded-lg font-medium">{n}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-
-      <div className="h-px bg-black/5 mx-6" />
-
-      {/* ── 推荐食谱 ── */}
-      {recommendations.dailyRecipes.length > 0 && (
-        <>
-          <section className="px-6 py-10">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-2">推荐食谱</p>
-                <p className="text-sm text-black/40">基于你的孕期阶段精选</p>
-              </div>
-              <button onClick={() => navigate('/knowledge')} className="text-sm text-black/40 hover:text-black/70 transition-colors">
-                查看全部 →
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {recommendations.dailyRecipes.slice(0, 5).map((recipe, i) => (
-                <div key={recipe.id} className="group">
-                  <div className="flex items-center gap-4 mb-2">
-                    <span className="text-xl flex-shrink-0">
-                      {recipe.category === 'soup' ? '🍲' : recipe.category === 'main' ? '🍽️' : recipe.category === 'breakfast' ? '🥣' : recipe.category === 'snack' ? '🍰' : '🥤'}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-[15px] font-medium text-black/75 mb-0.5 group-hover:text-black/90 transition-colors">{recipe.name}</h4>
-                      <p className="text-sm text-black/35 leading-relaxed truncate">{recipe.benefits}</p>
-                    </div>
-                    <span className={`text-[11px] px-2.5 py-1 rounded-full flex-shrink-0 font-medium ${
-                      recipe.difficulty === 'easy' ? 'bg-black/[0.04] text-black/45' : 'bg-black/[0.06] text-black/50'
-                    }`}>
-                      {recipe.difficulty === 'easy' ? '简单' : recipe.difficulty === 'medium' ? '中等' : '较难'}
-                    </span>
-                  </div>
-                  <div className="flex gap-1.5 ml-12">
-                    {recipe.keyNutrients.slice(0, 4).map(n => (
-                      <span key={n} className="text-[11px] text-black/30">{n}</span>
-                    ))}
-                    {recipe.keyNutrients.length > 4 && <span className="text-[11px] text-black/20">+</span>}
-                  </div>
-                  {i < recommendations.dailyRecipes.slice(0, 5).length - 1 && (
-                    <div className="h-px bg-black/[0.03] mt-5" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <div className="h-px bg-black/5 mx-6" />
-        </>
       )}
 
-      {/* ── 推荐运动 ── */}
+      {/* ════ 推荐运动 ════ */}
       {recommendations.dailyExercises.length > 0 && (
-        <>
-          <section className="px-6 py-10">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-2">推荐运动</p>
-                <p className="text-sm text-black/40">安全有效的孕期运动</p>
-              </div>
+        <div className="mx-4 mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-base font-semibold text-sage-800">今日推荐运动</h3>
+              <p className="text-xs text-sage-400 mt-0.5">安全有效的孕期运动</p>
             </div>
-
-            <div className="space-y-6">
-              {recommendations.dailyExercises.slice(0, 3).map((exercise, i) => (
-                <div key={exercise.id}>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xl flex-shrink-0">
-                      {exercise.category === 'yoga' ? '🧘' : exercise.category === 'walking' ? '🚶' : exercise.category === 'pelvic' ? '🦵' : exercise.category === 'breathing' ? '🌬️' : '🤸'}
-                    </span>
-                    <div className="flex-1">
-                      <h4 className="text-[15px] font-medium text-black/75 mb-0.5">{exercise.name}</h4>
-                      <p className="text-sm text-black/35">{exercise.frequency}</p>
-                    </div>
-                    <span className="text-[11px] px-2.5 py-1 rounded-full bg-black/[0.04] text-black/45 flex-shrink-0 font-medium">
-                      {exercise.duration} 分钟
-                    </span>
+          </div>
+          <div className="space-y-3">
+            {recommendations.dailyExercises.slice(0, 3).map(exercise => (
+              <div key={exercise.id} className="bg-white rounded-2xl p-4 shadow-sm border border-sage-100/60 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center text-lg flex-shrink-0">
+                    {exercise.category === 'yoga' ? '🧘' : exercise.category === 'walking' ? '🚶' : exercise.category === 'pelvic' ? '🦵' : exercise.category === 'breathing' ? '🌬️' : '🤸'}
                   </div>
-                  {i < recommendations.dailyExercises.slice(0, 3).length - 1 && (
-                    <div className="h-px bg-black/[0.03] mt-5" />
-                  )}
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-sage-800 text-sm">{exercise.name}</h4>
+                    <p className="text-xs text-sage-500 mt-0.5">{exercise.frequency} · {exercise.duration}分钟</p>
+                  </div>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-sage-100 text-sage-600 font-medium flex-shrink-0">
+                    {exercise.duration}min
+                  </span>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          <div className="h-px bg-black/5 mx-6" />
-        </>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
-      {/* ── 贴心提醒 ── */}
+      {/* ════ 贴心提醒 ════ */}
       {recommendations.warningFlags.length > 0 && (
-        <section className="px-6 py-10">
-          <p className="text-xs tracking-[0.2em] uppercase text-black/30 mb-6">贴心提醒</p>
-          <div className="space-y-3">
+        <div className="mx-4 mt-6 bg-gradient-to-br from-terra-50 to-cream-100 rounded-[1.5rem] p-5 border border-terra-200/30">
+          <h3 className="text-sm font-semibold text-terra-700 mb-3">贴心提醒</h3>
+          <div className="space-y-2.5">
             {recommendations.warningFlags.map((flag, i) => (
-              <p key={i} className="text-sm text-black/50 leading-relaxed flex gap-3">
-                <span className="text-black/20 flex-shrink-0">—</span>
+              <p key={i} className="text-sm text-terra-700/80 leading-relaxed flex gap-2">
+                <span className="text-terra-400 flex-shrink-0">•</span>
                 {flag}
               </p>
             ))}
           </div>
-        </section>
+        </div>
       )}
     </div>
   )
